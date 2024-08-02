@@ -10,6 +10,7 @@ const initialState = {
     singleEvent: null,
     securityQuestion:null,
     accountName:null,
+    businessAccount:null,
   },
   loading: false,
   error: null,
@@ -76,6 +77,14 @@ export const getAccountName = createAsyncThunk(
     return APIService.getAccountName(phoneNumber);
   }
 );
+
+export const getBusinessAccount = createAsyncThunk(
+  "misc/getBusinessAccount",
+  async (data) => {
+    return APIService.getBusinessAccount(data);
+  }
+);
+
 
 const handleFulfilled = (state, action) => {
   if (action.payload.status_code === '0') {
@@ -226,6 +235,20 @@ const miscellaneousSlice = createSlice({
         state.miscellaneousdata.accountName = handleFetch(state, action);
       })
       .addCase(getAccountName.rejected, (state, action) => {
+        state.loading = false;
+        state.error = action.error.message || 'Failed to fetch single event';
+        showErrorToast(state.error);
+      })
+      //GET BUSINESS ACCOUNT
+      .addCase(getBusinessAccount.pending, (state) => {
+        state.loading = true;
+        state.error = null;
+      })
+      .addCase(getBusinessAccount.fulfilled, (state, action) => {
+        state.loading = false;
+        state.miscellaneousdata.businessAccount = handleFulfilled(state, action);
+      })
+      .addCase(getBusinessAccount.rejected, (state, action) => {
         state.loading = false;
         state.error = action.error.message || 'Failed to fetch single event';
         showErrorToast(state.error);

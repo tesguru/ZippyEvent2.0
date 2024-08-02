@@ -109,8 +109,27 @@ throw error
 //ACCOUNT NAME
 static async getAccountName(phonenumber) {
   try {
-    const response = await apiTest.post('get_customer_name', new URLSearchParams({ phonenumber }));
+    const response = await apiTest.post('user_detail', new URLSearchParams({ phonenumber }));
     return response.data;
+  } catch (error) {
+    APIService.extractServerError(error);
+    throw error;
+  }
+}
+//create Businesss Account
+static async createBusinessAccount(data) {
+  try {
+    const response = await apiTest.post('create_business_account_number', new URLSearchParams({ data }));
+    return response.data;
+  } catch (error) {
+    APIService.extractServerError(error);
+    throw error;
+  }
+}
+//create Account
+static async createAccount(data) {
+  try {
+    return apiClient.post("/user_account_creation", data);
   } catch (error) {
     APIService.extractServerError(error);
     throw error;

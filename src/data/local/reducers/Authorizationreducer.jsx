@@ -6,6 +6,7 @@ import { showErrorToast, showSuccessToast } from "../../../Utils/api-utils";
 const initialState = {
   loading: false,
   error: null,
+  createAccountResponse:null,
   isAuthenticated: false,
   ...retrieveFromLocalStorage([
     "loginProfile"
@@ -25,10 +26,10 @@ export const login = createAsyncThunk("/user_login", async (userCredentials) => 
   return response;
 });
 
-export const createEvent = createAsyncThunk(
-  "misc/createEvent",
+export const createAccount = createAsyncThunk(
+  "misc/createAccount",
   async (data) => {
-    return APIService.createEvent(data);
+    return APIService.createAccount(data);
   }
 );
 
@@ -60,20 +61,21 @@ const AuthenticationSlice = createSlice({
         state.loading = false;
         state.error = showErrorToast(action.error.message);
       })
-      .addCase(createEvent.pending, (state) => {
+      .addCase(createAccount.pending, (state) => {
         state.loading = true;
         state.error = null;
       })
-      .addCase(createEvent.fulfilled, (state, action) => {
+      .addCase(createAccount.fulfilled, (state, action) => {
         if (action.payload.status_code === "0") {
-          showSuccessToast("Event created successfully!");
+          showSuccessToast("Account created successfully!");
         } else {
           state.error = action.payload.message;
           showErrorToast(action.payload.message);
         }
+        console.log(action.payload);
         state.loading = false;
       })
-      .addCase(createEvent.rejected, (state, action) => {
+      .addCase(createAccount.rejected, (state, action) => {
         state.loading = false;
         state.error = showErrorToast(action.error.message);
       })

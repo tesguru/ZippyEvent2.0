@@ -1,12 +1,15 @@
 import React, { useState, useEffect } from 'react';
 import image4 from '../assets/Images/zippylogo.png';
 import { useDispatch, useSelector } from 'react-redux';
-import { getSecurityQuestions, getAccountName } from '../data/local/reducers/Miscellaneousslicereducer';
+import { getSecurityQuestions, getAccountName, getBusinessAccount } from '../data/local/reducers/Miscellaneousslicereducer';
+import { showErrorToast } from '../Utils/api-utils';
+import { createAccount } from '../data/local/reducers/Authorizationreducer';
 
 const Register = () => {
   const dispatch = useDispatch();
   const securityQuestion = useSelector((state) => state.misc.miscellaneousdata?.securityQuestion);
   const accountName = useSelector((state) => state.misc.miscellaneousdata?.accountName);
+  const businessAccount = useSelector((state) => state.misc.miscellaneousdata?.businessAccount);
 
   useEffect(() => {
     dispatch(getSecurityQuestions());
@@ -17,9 +20,11 @@ const Register = () => {
     lastName: '',
     email: '',
     mobileNumber: '',
+    userChoice: '',
     password: '',
-    confirmPassword: '',
+    gender: '',
     accountName: '',
+    accountNumber: '',
     walletNumber: '',
     bvn: '',
     accountPin: '',
@@ -54,20 +59,85 @@ const Register = () => {
     }));
   };
 
-  const handleSubmit = (e) => {
+  const handleSubmit = async (e) => {
     e.preventDefault();
-    console.log('Form State:', formState);
+
+    const fullName = `${formState.firstName} ${formState.lastName}`.substring(0, 21);
+    let accountNumber = '';
+    let accountName = '';
+    let walletNumber = formState.mobileNumber;
+
+    if (formState.userChoice === 'no') {
+      const accountDetailsData = {
+        firstname: formState.firstName,
+        lastname: formState.lastName,
+        phonenumber: formState.mobileNumber,
+        email: formState.email,
+        bvn: formState.bvn,
+        pin: formState.accountPin,
+        secure_id: formState.securityQuestion,
+        answer: formState.securityAnswer
+      };
+
+      try {
+        dispatch(getBusinessAccount)
+
+        if (businessAccount.status_code === '0') {
+          const checkUserDetails = await getAccountName(formState.mobileNumber);
+          const zippyAccountNumber = checkUserDetails.user_detail[0].account_no;
+
+          if (zippyAccountNumber !== formState.mobileNumber) {
+            accountNumber = zippyAccountNumber;
+            accountName = checkUserDetails.user_detail[0].names;
+          } else {
+            accountNumber = 'NAV';
+            accountName = checkUserDetails.user_detail[0].names;
+          }
+        } else {
+          showErrorToast(businessAccount.message);
+          return;
+        }
+      } catch (err) {
+        showErrorToast('Network Error, Contact Admin');
+        return;
+      }
+    } else {
+      accountNumber = formState.accountNumber;
+      accountName = formState.accountName;
+      walletNumber = formState.walletNumber;
+
+      if (!accountNumber) {
+        showErrorToast('Invalid Zippy Wallet Number');
+        return;
+      }
+    }
+
+    const data = {
+      firstname: formState.firstName,
+      lastname: formState.lastName,
+      gender: formState.gender,
+      phonenumber: formState.mobileNumber,
+      email: formState.email,
+      zippyAccountNumber: accountNumber,
+      zippyAccountName: accountName,
+      zippyWalletNumber: walletNumber,
+      password: formState.password
+    };
+
+       dispatch(createAccount(data))
+
   };
 
   useEffect(() => {
     if (accountName) {
       setFormState(prevState => ({
         ...prevState,
-        accountName: accountName.names || ''
+        accountName: accountName.user_detail[0].names || '',
+         accountNumber: accountName.user_detail[0].account_no || ''
       }));
     }
   }, [accountName]);
-
+console.log(accountName)
   return (
     <>
       <div className="max-w-4xl mx-auto p-6">
@@ -99,12 +169,12 @@ const Register = () => {
               <input name="password" type="password" className="bg-gray-100 w-full text-gray-800 text-sm px-4 py-3.5 rounded-md focus:bg-transparent outline-blue-500 transition-all" placeholder="Enter password" value={formState.password} onChange={handleInputChange} />
             </div>
             <div>
-              <label className="text-gray-800 text-sm mb-2 block">Confirm Password</label>
-              <input name="confirmPassword" type="password" className="bg-gray-100 w-full text-gray-800 text-sm px-4 py-3.5 rounded-md focus:bg-transparent outline-blue-500 transition-all" placeholder="Enter confirm password" value={formState.confirmPassword} onChange={handleInputChange} />
+              <label className="text-gray-800 text-sm mb-2 block">Gender</label>
+              <input name="gender" type="password" className="bg-gray-100 w-full text-gray-800 text-sm px-4 py-3.5 rounded-md focus:bg-transparent outline-blue-500 transition-all" placeholder="Enter confirm password" value={formState.gender} onChange={handleInputChange} />
             </div>
             <div>
               <label htmlFor="haveZippyAccount" className="text-gray-800 text-sm mb-2 block">Do you have an account with Zippyworld?</label>
-              <select id="haveZippyAccount" name="question_choice" className="bg-gray-100 w-full text-gray-800 text-sm px-4 py-3.5 rounded-md focus:bg-transparent outline-blue-500 transition-all" onChange={handleChoiceChange} value={userChoice}>
+              <select id="haveZippyAccount" name="question_choice" className="bg-gray-100 w-full text-gray-800 text-sm px-4 py-3.5 rounded-md focus:bg-transparent outline-blue-500 transition-all" onChange={handleChoiceChange} value={formState.userChoice}>
                 <option value="">...select</option>
                 <option value="no">No, I don't Have</option>
                 <option value="yes">Yes, I have a Zippyworld Account</option>
@@ -122,6 +192,7 @@ const Register = () => {
               <div>
                 <label className="text-gray-800 text-sm mb-2 block">ZippyWorld Account Name<code>*</code></label>
                 <input type="text" readOnly className="bg-gray-100 w-full text-gray-800 text-sm px-4 py-3.5 rounded-md focus:bg-transparent outline-blue-500 transition-all" name="accountName" id="account_name" value={formState.accountName} />
+                <input type="text" readOnly className="bg-gray-100 w-full text-gray-800 text-sm px-4 py-3.5 rounded-md focus:bg-transparent outline-blue-500 transition-all" name="accountName" id="account_name" value={formState.accountNumber} />
               </div>
             </div>
           )}

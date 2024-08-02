@@ -10,8 +10,7 @@ import Eventsubsection from '../Components/Steps/Eventsubsection';
 import { yupResolver } from '@hookform/resolvers/yup';
 import { useForm, Controller } from 'react-hook-form';
 import { login } from '../data/local/reducers/Authorizationreducer';
-import {eventDetailsSchema, eventPaymentSchema, eventSubsectionSchema, eventQuestionSchema } from '../Utils/Validation';
-import { createEvent } from '../data/local/reducers/Authorizationreducer';
+import { createEvent } from '../data/local/reducers/Miscellaneousslicereducer';
 
 const CreateEvent = () => {
   const dispatch = useDispatch();
