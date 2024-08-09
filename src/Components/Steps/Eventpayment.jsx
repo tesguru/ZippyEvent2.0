@@ -106,7 +106,7 @@ if(generalPayment === false && getValues("general_amount")){
       )}
 
 {generalPayment && (
-        <div>
+        <div className="w-full">
            <label className="block tracking-wide text-black text-sm font-extrabold mb-4" htmlFor="general_amount">General Amount</label>
           <Controller
             name="general_amount"
@@ -125,11 +125,12 @@ if(generalPayment === false && getValues("general_amount")){
     {fields.map((category, index) => (
       <React.Fragment key={index}>
         <div className="grid gap-6 grid-cols-2">
+          <div>
           <label
             className="block tracking-wide text-black text-sm font-extrabold mb-4"
             htmlFor={`category-name-${index}`}
           >
-            Category Name {`${index + 1}`}
+            Category Name 
           </label>
           <Controller
             name={`categories.${index}.name`}
@@ -143,8 +144,8 @@ if(generalPayment === false && getValues("general_amount")){
               />
             )}
           />
-        </div>
-        <div>
+          </div>
+          <div>
           <label
             className="block tracking-wide text-black text-sm font-extrabold mb-4"
             htmlFor={`category-amount-${index}`}
@@ -164,22 +165,25 @@ if(generalPayment === false && getValues("general_amount")){
             )}
           />
         </div>
-        <button
-          type="button"
-          onClick={() => removeCategory(index)}
-          className="mt-4 px-4 py-2 bg-green-300 text-sm text-white rounded-lg"
-        >
-          Remove
-        </button>
-      </React.Fragment>
-    ))}
-    <button
+        </div>
+        <div className="flex justify-between"> <button
       type="button"
       onClick={() => addNewCategory(DEFAULT_CATEGORY_VALUE)}
-      className="mt-4 px-4 py-2 bg-green-300 text-sm text-white rounded-lg"
+      className="mt-4 px-4 py-2 bg-green-600 text-sm text-white rounded-lg"
     >
       Add More
     </button>
+        <button
+          type="button"
+          onClick={() => removeCategory(index)}
+          className="mt-4 px-4 py-2 bg-red-300 text-sm text-white rounded-lg"
+        >
+          Remove
+        </button>
+        </div>
+      </React.Fragment>
+    ))}
+   
   </>
 )}
 

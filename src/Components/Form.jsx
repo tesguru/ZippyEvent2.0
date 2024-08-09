@@ -1,14 +1,24 @@
-import React from 'react'
+import React from 'react';
 
-const Form = ({ LabelName, FormName, FormType, placeholderName, formValue, onChange}) => {
-  return (
-    <>
-       <label className="block tracking-wide text-black text-sm font-extrabold mb-4" htmlFor="grid-first-name">
-       {LabelName}
-     </label>
-     <input value={formValue} onChange={onChange} type={FormType} name={FormName} className={`abg-gray-100 w-full text-gray-800 text-sm px-4 py-3.5 rounded-md focus:bg-transparent outline-blue-500 transition-all`} required placeholder={placeholderName} />
-    </>
-  )
-}
+const Form = ({ LabelName, FormName, formValue, onChange, FormType }) => {
+    return (
+        <div className="mb-4">
+            <label className="block text-gray-700 text-sm font-bold mb-2" htmlFor={FormName}>
+                {LabelName}
+            </label>
+            <input
+                id={FormName}
+                name={FormName}
+                value={formValue}
+                type={FormType}
+                onChange={onChange}
+                className="appearance-none block w-full bg-gray-200 text-gray-700 border border-blue-200 rounded py-3 px-4 mb-3 leading-tight focus:outline-none focus:bg-white"
+                placeholder={LabelName}
+            />
+        </div>
+    );
+};
 
-export default Form
+
+
+export default Form;

@@ -11,6 +11,7 @@ import CreateEvent from './Pages/CreateEvent';
 import Viewevents from './Pages/Viewevents';
 import PrintAccessCard from './Pages/Accesscard';
 import Register from './Pages/Register';
+import Registeruser from './Pages/Registeruser';
 
 const App = () => {
   return (
@@ -19,6 +20,7 @@ const App = () => {
         <Route path="/" element={<IndexPage />} />
         <Route path="/login" element={<LoginPage />} />
         <Route path="/register" element={<Register />} />
+        <Route path="/registeruser/:id?" element={<Registeruser />} />
         <Route path="/dashboard" element={<DashboardPage />} />
         <Route path="/events" element={<Event />} />
         <Route path="/response" element={<Response />} />

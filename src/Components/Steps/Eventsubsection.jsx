@@ -160,22 +160,25 @@ const Eventsubsection = ({methods}) => {
             />
                  
                 </div>
+                <div className='flex justify-between py-4'>
                 <button
               type="button"
-              onClick={() => removeSection(index)}
-              className="mt-4 px-4 py-2 bg-green-300 text-sm text-white rounded-lg"
-            >
-              Remove
-            </button>
-              </div>
-            ))}
-            <button
-              type="button"
               onClick={() => addNewSection(DEFAULT_SECTION_VALUE)}
-              className="mt-4 px-4 py-2 bg-green-300 text-sm text-white rounded-lg"
+              className="mt-4 px-4 py-2 bg-green-600 text-sm text-white rounded-lg"
             >
               Add More
             </button>
+                <button
+              type="button"
+              onClick={() => removeSection(index)}
+              className="mt-4 px-4  bg-red-300 text-sm text-white rounded-lg"
+            >
+              Remove
+            </button>
+            </div>
+              </div>
+            ))}
+           
            
           </>
         )}

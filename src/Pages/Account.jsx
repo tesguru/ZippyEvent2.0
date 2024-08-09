@@ -17,7 +17,7 @@ const Account = () => {
         setActiveComponent('create');
     };
 
-    console.log(loginProfile);
+   
 
     return (
         <>

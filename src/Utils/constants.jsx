@@ -6,9 +6,11 @@ export const HEADER = {
   "x-api-key": '6128892',
     "content-type": "application/x-www-form-urlencoded",
   };
-
- 
-
+  export const HEADER3 = {
+    "x-api-key": '6128892',
+    "content-type": "multipart/form-data",
+  };
+  
   export const retrieveFromLocalStorage = (keys) => {
     const data = {};
     keys.forEach((key) => {
