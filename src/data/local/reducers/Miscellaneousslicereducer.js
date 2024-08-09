@@ -11,6 +11,7 @@ const initialState = {
     securityQuestion:null,
     accountName:null,
     businessAccount:null,
+    businessAccountNumber:null,
   },
   loading: false,
   error: null,
@@ -51,6 +52,7 @@ export const updateAccount = createAsyncThunk(
 export const createEvent = createAsyncThunk(
   "misc/createEvent",
   async (data) => {
+    console.log(APIService.createEvent(data));
     return APIService.createEvent(data);
   }
 );
@@ -80,6 +82,13 @@ export const getAccountName = createAsyncThunk(
 
 export const getBusinessAccount = createAsyncThunk(
   "misc/getBusinessAccount",
+  async (data) => {
+    return APIService.getBusinessAccount(data);
+  }
+);
+
+export const getBusinessAccountNumber = createAsyncThunk(
+  "misc/getBusinessAccountNumber",
   async (data) => {
     return APIService.getBusinessAccount(data);
   }
@@ -249,6 +258,20 @@ const miscellaneousSlice = createSlice({
         state.miscellaneousdata.businessAccount = handleFulfilled(state, action);
       })
       .addCase(getBusinessAccount.rejected, (state, action) => {
+        state.loading = false;
+        state.error = action.error.message || 'Failed to fetch single event';
+        showErrorToast(state.error);
+      })
+//Business Account Number
+      .addCase(getBusinessAccountNumber.pending, (state) => {
+        state.loading = true;
+        state.error = null;
+      })
+      .addCase(getBusinessAccountNumber.fulfilled, (state, action) => {
+        state.loading = false;
+        state.miscellaneousdata.businessAccountNumber = handleFulfilled(state, action);
+      })
+      .addCase(getBusinessAccountNumber.rejected, (state, action) => {
         state.loading = false;
         state.error = action.error.message || 'Failed to fetch single event';
         showErrorToast(state.error);

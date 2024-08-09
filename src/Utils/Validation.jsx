@@ -59,12 +59,6 @@ import { phoneRegExp } from "./api-utils";
       is: true,
       then: Yup.boolean().required('General Payment is required'),
     }),
-    general_amount: Yup.number().when('generalPayment', {
-      is: true,
-      then: Yup.number()
-        .required('General Amount is required')
-        .positive('General Amount must be positive'),
-    }),
     categories: Yup.array().of(
       Yup.object().shape({
         name: Yup.string().required('Category Name is required'),

@@ -33,7 +33,7 @@ const Login = () => {
     <>
 <div className="">
 <Spinnerloader open={auth.loading} />
-      <div className="grid lg:grid-cols-2 gap-4 max-lg:gap-12 bg-zippy px-8 py-12 h-[320px]">
+      <div className="grid lg:grid-cols-2 gap-4 max-lg:gap-12 bg-gradient-to-r from-zippy to-blue-400 min-h-[160px] px-8 py-12 h-[320px]">
         <div>
         <a className="flex items-center text-white no-underline hover:no-underline font-extrabold text-1xl lg:text-4xl" href="#"> 
 			<img src={image4} className=" h-12 " /><p className='ml-2 text-md'>ZippyEvents</p>
@@ -74,7 +74,6 @@ const Login = () => {
   </button>
   </NavLink>
 </div>
-
 
             <div>
               <label className="text-black font-bold text-md mb-2 block">Email Address</label>

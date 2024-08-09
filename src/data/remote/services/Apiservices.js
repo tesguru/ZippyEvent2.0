@@ -1,5 +1,6 @@
 import { showErrorToast } from "../../../Utils/api-utils";
 import { apiClient } from "../clients/Apiclient";
+import { apiLive } from "../clients/Apiclient";
 import { apiTest } from "../clients/Apiclient";
 
 export class APIService {
@@ -29,6 +30,7 @@ static async login(userCredentials) {
       throw error;
     }
   }
+
   //GET USER EVENT
   static async getUserEvent(userName) {
     try {
@@ -39,6 +41,7 @@ static async login(userCredentials) {
       throw error;
     }
   }
+
   //GET EVENT LOG
   static async getEventLog(userName){
     try{
@@ -65,7 +68,6 @@ static async login(userCredentials) {
   }
 
   //Update Account
- 
 static async updateAccount(accountData) {
   try {
     return apiClient.post("/update_account", accountData);
@@ -97,7 +99,7 @@ throw error
 //SECURITY QUESTIONS
 static async securityQuestion(){
   try{
-    const response = await apiTest.get('get_security_questions');
+    const response = await apiLive.get('get_security_questions');
     return response.data;
   }
   catch(error){
@@ -109,15 +111,27 @@ throw error
 //ACCOUNT NAME
 static async getAccountName(phonenumber) {
   try {
-    const response = await apiTest.post('user_detail', new URLSearchParams({ phonenumber }));
+    const response = await apiLive.post('user_detail', new URLSearchParams({ phonenumber }));
     return response.data;
   } catch (error) {
     APIService.extractServerError(error);
     throw error;
   }
 }
+
 //create Businesss Account
 static async createBusinessAccount(data) {
+  try {
+    const response = await apiLive.post('create_business_account_number', new URLSearchParams({ data }));
+    return response.data;
+  } catch (error) {
+    APIService.extractServerError(error);
+    throw error;
+  }
+}
+
+//create Businesss Account
+static async createBusinessAccountNumber(data) {
   try {
     const response = await apiTest.post('create_business_account_number', new URLSearchParams({ data }));
     return response.data;
@@ -135,6 +149,8 @@ static async createAccount(data) {
     throw error;
   }
 }
+
+
 
 
 }
